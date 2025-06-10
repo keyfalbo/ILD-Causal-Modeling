@@ -74,7 +74,7 @@ else:
 df_morning = pd.read_csv(r"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Morning.csv") # Read the appropriate csv file
 
 # Clean dataframe and keep only data from specific participant
-df_morning = df_morning.drop([0], axis=0)
+df_morning = df_morning.drop([0,1], axis=0)
 df_morning = df_morning[df_morning['ExternalReference'].str.contains(participant_id) == True]
 df_morning['ExternalReference'] = df_morning['ExternalReference'].str.rsplit('M', n=1).str[0]
 df_morning = df_morning.drop(['EndDate', 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'Finished', 'RecordedDate', 'ResponseId', 'RecipientLastName', 
