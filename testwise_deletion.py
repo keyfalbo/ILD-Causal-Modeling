@@ -1,5 +1,15 @@
+import sys
+import os
+from jvm_debug import start_jvm
+# needed to include pytetrad
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), "py-tetrad/pytetrad/"))
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), "py-tetrad/"))
+
 import numpy as np
 import pandas as pd
+
+import jpype
+import jpype.imports  # Enables Java package-style imports
 
 from numpy.linalg import svd, inv, cholesky
 

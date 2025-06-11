@@ -1,11 +1,14 @@
+from jvm_debug import start_jvm
 import pandas as pd
 import numpy as np
 import os
+import sys
+# needed to include pytetrad
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), "py-tetrad/pytetrad/"))
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), "py-tetrad/"))
 
-import jpype
-import jpype.imports
-
-jpype.startJVM("-Xmx4g", classpath=[f"resources/tetrad-current.jar"])
+#Input Directory
+input_dir = r"Sample-Data"
 
 from testwise_deletion import DG
 
@@ -18,7 +21,7 @@ boss_bes = False
 boss_starts = 2
 boss_threads = 3
 
-df = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_data.csv"))
+df = pd.read_csv(os.path.join(input_dir, "group_data.csv"))
 
 # Create knowledge
 knowledge = td.Knowledge()
@@ -124,5 +127,5 @@ for rep in range(reps):
     boss.setKnowledge(knowledge)
 
     graph = boss.search()
-    f = open(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\Jackknifing Graphs\group_jk{rep}.txt",'w')
-    f.write(str(graph.toString()))
+    with open(os.path.join(input_dir, "Jackknifing Graphs", f"group_jk{rep}.txt"),'w') as f:
+        f.write(str(graph.toString()))

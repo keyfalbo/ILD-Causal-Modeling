@@ -1,22 +1,23 @@
 import pandas as pd
-import jpype
-import jpype.imports
 import os
 import sys
-
-jpype.startJVM("-Xmx4g", classpath=[f"resources/tetrad-current.jar"])
-
+# needed to include pytetrad
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), "py-tetrad/pytetrad/"))
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), "py-tetrad/"))
 from testwise_deletion import DG
 
 import edu.cmu.tetrad.data as td
 import edu.cmu.tetrad.search as ts
+import numpy as np
+
+input_dir = "Sample-Data"
 
 # Set parameters for BOSS
 boss_bes = False
 boss_starts = 2
 boss_threads = 3
 
-df = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_data.csv"))
+df = pd.read_csv(os.path.join(input_dir, "group_data.csv"))
 
 # Create knowledge
 knowledge = td.Knowledge()
@@ -117,7 +118,8 @@ boss = ts.PermutationSearch(boss)
 boss.setKnowledge(knowledge)
 
 graph = boss.search()
+    
 
 # Write CPDAG to txt file
-f = open(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_cpdag.txt",'w')
-f.write(str(graph.toString()))
+with open(os.path.join(input_dir, "group_cpdag.txt"),'w'):
+    f.write(str(graph.toString()))

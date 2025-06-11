@@ -2,6 +2,8 @@ import pandas as pd
 import sys
 import os
 
+input_dir = r"Sample-Data"
+
 # Get participant ID
 participant_id = input("What is the participant ID? ")
 
@@ -50,7 +52,7 @@ else:
     sys.exit()
 
 # Read the appropriate csv file
-df = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_combineddata2.csv"))
+df = pd.read_csv(os.path.join(input_dir, f"{participant_id}_combineddata2.csv"))
 
 # Create a list of variables for this participant
 variables_list = df.columns.tolist()
@@ -121,7 +123,7 @@ for item in weather_list:
 
 
 # Write text file
-f = open(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_knowledge.txt",'w')
+f = open(os.path.join(input_dir, f"{participant_id}_knowledge.txt"),'w')
 
 f.write('/knowledge')
 f.write('\n')

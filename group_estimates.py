@@ -4,9 +4,11 @@ import sys
 from semopy import Model
 import semopy as sem
 
+#Input Directory
+input_dir = r"Sample-Data"
 
 # Read saved group graph and convert to lavaan format
-path = (fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_cpdag.txt")
+path = (os.path.join(input_dir, "group_cpdag.txt"))
 with open(path) as f:
     f.readline()
     f.readline()
@@ -30,14 +32,14 @@ for node in nodes:
         model += node + ' ~ ' + ' + '.join(edges[node]) + '\n'
 
 # Read the appropriate csv file
-df = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_data.csv"))
+df = pd.read_csv(os.path.join(input_dir, "group_data.csv"))
 
 # Calculate estimates
 model2 = Model(model)
 model2.fit(df)
 estimates = model2.inspect()
-estimates.to_csv(os.path.join(fr'R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_estimates.csv'), index=False, header=True)
+estimates.to_csv(os.path.join(input_dir, 'group_estimates.csv'), index=False, header=True)
 
 # Calculate model fit statistics
 stats = sem.calc_stats(model2)
-stats.to_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_fitstats.csv"), index=False, header=True)
+stats.to_csv(os.path.join(input_dir, "group_fitstats.csv"), index=False, header=True)
