@@ -32,6 +32,8 @@ Intensive longitudinal data for this project were provided as CSV files. Each ro
 
 This project also included a fifth CSV file containing weather data for each participant downloaded from the Open-Meteo Weather Application Programming Interface [2], where the CSV file was titled EMAXX_Weather.csv, where “XX” represented the participant ID number. This weather data file included weather data from any traveling that the participant completed over the study protocol period, combined into a single file.
 
+Note: Causal modeling requires sufficient data to detect effects. Sample data in this repository contains only 15 observations per participant; therefore, causal modeling code will produce singularity errors with sample data.
+
 ## Configuration
 
 Prior to running the analysis, you will need to configure parameters such as:  
