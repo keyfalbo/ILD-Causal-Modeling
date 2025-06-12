@@ -3,6 +3,8 @@ import os
 import sys
 import numpy as np
 
+input_dir = "Sample-Data"
+
 # Read each saved jackknifing text file. Convert each to csv file.
 for i in range(50):
     node_1_list = []
@@ -13,7 +15,7 @@ for i in range(50):
     interaction_1_list = []
     interaction_2_list = []
     interaction_3_list = []
-    with open(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\Jackknifing Graphs\group_jk{i}.txt", 'r') as file:
+    with open(os.path.join(input_dir, fr"group_jk{i}.txt"), 'r') as file:
         lines = file.readlines()
         for line in lines:
             if line[0].isdigit():
@@ -34,11 +36,11 @@ for i in range(50):
     df_bootstrap['Interaction'] = interaction_list
     df_bootstrap['Node_2'] = node_2_list
 
-    df_bootstrap.to_csv(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\Jackknifing Graphs\CSV graphs\group_jk{i}.csv", index=False, header=True)
+    df_bootstrap.to_csv(os.path.join(input_dir,fr"group_jk{i}.csv"), index=False, header=True)
 
 
 # Merge all csv files into a single dataframe
-file_path = (fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\Jackknifing Graphs\CSV graphs")
+file_path = (fr"CSV graphs")
 file_list = os.listdir(file_path)
 
 # Create a dictionary of dataframes. For each file in the file_list, read the csv with that file name, save it to a dataframe, and name the dataframe df_0, df_1, etc.
@@ -47,18 +49,18 @@ file_list = os.listdir(file_path)
 df_dict = {}
 df_list = []
 for i, file in enumerate(file_list):
-    df = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\Jackknifing Graphs\CSV graphs\{file}"))
+    df = pd.read_csv(os.path.join(fr"CSV graphs\{file}"))
     df_name = f"df_{i}"
     df_dict[df_name] = df
     df_list.append(df)
 
 merged_df = pd.concat(df_list, ignore_index=True)
 
-merged_df.to_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_jackknifing_alledges.csv"), index = False, header=True)
+merged_df.to_csv(os.path.join(input_dir, fr"group_jackknifing_alledges.csv"), index = False, header=True)
 
 
 ### THE FOLLOWING CODE WORKS FOR ALL DIRECTED EDGES. UNDIRECTED EDGES MUST BE DEALT WITH MANUALLY FROM CSV SAVED AFTER RUNNING THIS CODE. ###
-merged_df = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_jackknifing_alledges.csv"))
+merged_df = pd.read_csv(os.path.join(input_dir, fr"group_jackknifing_alledges.csv"))
 merged_df['Node_2'] = merged_df['Node_2'].str.replace('\n', '', regex=False)
 
 specific_edges_df = merged_df.groupby(merged_df.columns.tolist(),as_index=False).size()
@@ -121,4 +123,4 @@ def find_match_remove_second(df):
 specific_edges_df_dropped = find_match_remove_second(specific_edges_df)
 
 # Save csv file. Manually check for undirected edges and update percentages of corresponding edges accordingly.
-specific_edges_df_dropped.to_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Group Analysis\group_jackknifing_merged.csv"), index = False, header=True)
+specific_edges_df_dropped.to_csv(os.path.join(input_dir, fr"group_jackknifing_merged.csv"), index = False, header=True)

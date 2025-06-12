@@ -3,6 +3,9 @@ import sys
 from itertools import groupby
 import os
 
+#Input Directory
+input_dir = r"Sample-Data"
+
 # Get participant ID
 participant_id = input("What is the participant ID? ")
 
@@ -51,7 +54,7 @@ else:
     sys.exit()
 
 # Read the appropriate csv file
-df = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_combineddata1_nomissing.csv"))   
+df = pd.read_csv(os.path.join(input_dir, f"{participant_id}_combineddata1.csv"))   
 
 # Delete columns
 df = df.drop(['ExternalReference', 'plp_fallasleep', 'plp_stayasleep', 'plp_yn', 'other_pain_yn', 'activity_yn', 'prosthesis_yn', 'feels_like_k', 'plp_duration',  'plp_interference', 'plp_interference_before_next_survey'], axis = 1)
@@ -196,10 +199,10 @@ for column in df:
             pass
 
 # Save csv file before standardiaing
-df.to_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_combineddata2_before_standardization.csv"), index=False, header=True)
+df.to_csv(os.path.join(input_dir, f"{participant_id}_combineddata2_before_standardization.csv"), index=False, header=True)
 
 # Standardize all variables
 df_std = (df - df.mean()) / df.std()
 
 # Save csv file after standardizing
-df_std.to_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_combineddata2.csv"), index=False, header=True)
+df_std.to_csv(os.path.join(input_dir, f"{participant_id}_combineddata2.csv"), index=False, header=True)

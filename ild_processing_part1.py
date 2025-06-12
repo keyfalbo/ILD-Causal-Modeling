@@ -4,6 +4,10 @@ from itertools import groupby
 import os
 from statistics import mean
 from datetime import datetime
+import os
+
+#Input Directory
+input_dir = r"Sample-Data"
 
 # Get participant ID
 participant_id = input("What is the participant ID? ")
@@ -71,7 +75,7 @@ else:
 
 
 ########### MORNING SURVEY PROCESSING ###########
-df_morning = pd.read_csv(r"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Morning.csv") # Read the appropriate csv file
+df_morning = pd.read_csv(os.path.join(input_dir,"Morning.csv")) # Read the appropriate csv file
 
 # Clean dataframe and keep only data from specific participant
 df_morning = df_morning.drop([0,1], axis=0)
@@ -180,7 +184,7 @@ df_morning['evening'] = 0
 
 
 ########### AFTERNOON SURVEY PROCESSING ###########
-df_afternoon = pd.read_csv(r"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Afternoon.csv") # Read the appropriate csv file
+df_afternoon = pd.read_csv(os.path.join(input_dir,"Afternoon.csv")) # Read the appropriate csv file
 
 # Clean dataframe and keep only data from specific participant
 df_afternoon = df_afternoon.drop([0,1], axis=0)
@@ -251,7 +255,7 @@ df_afternoon['evening'] = 0
 
 
 ########### EVENING SURVEY ###########
-df_evening = pd.read_csv(r"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Evening.csv") # Read the appropriate csv file
+df_evening = pd.read_csv(os.path.join(input_dir,"Evening.csv")) # Read the appropriate csv file
 
 # Clean dataframe and keep only data from specific participant
 df_evening = df_evening.drop([0,1], axis=0)
@@ -325,7 +329,7 @@ df_evening['evening'] = 1
 
 
 ########### PAIN SURVEY PROCESSING ###########
-df_pain = pd.read_csv(r"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\Pain.csv") # Read the appropriate csv file
+df_pain = pd.read_csv(os.path.join(input_dir, "Pain.csv")) # Read the appropriate csv file
 
 # Clean dataframe and keep only data from specific participant
 df_pain = df_pain.drop([0,1], axis=0)
@@ -852,7 +856,7 @@ df_combined['DateTime'] = pd.to_datetime(df_combined['DateTime'])
 
 
 ########### WEATHER ###########
-df_weather = pd.read_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_Weather.csv")) # Read the appropriate csv file
+df_weather = pd.read_csv(os.path.join(input_dir, f"{participant_id}_Weather.csv")) # Read the appropriate csv file
 
 # Format columns and data
 df_weather = df_weather[['time', 'temperature_2m (°C)', 'relative_humidity_2m (%)', 'apparent_temperature (°C)', 'rain (mm)', 'snowfall (cm)', 'pressure_msl (hPa)']]
@@ -1018,7 +1022,7 @@ missing_values = df_combined2.isna().sum()
 df_missing = pd.DataFrame(missing_values)
 
 # Record missing values for each column for this participant in a csv file
-df_missing.to_csv(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_missingdata.csv", index=True, header=False)
+df_missing.to_csv(os.path.join(input_dir, f"{participant_id}_missingdata.csv"), index=True, header=False)
 
 # Use median imputation for missing values in each column except socket_comfort
 variables_with_missing = df_combined2.columns[df_combined2.isnull().any()]
@@ -1042,4 +1046,5 @@ else:
 
 # Save csv file
 for id, group in df_combined2.groupby(['ExternalReference']):
-    group.to_csv(os.path.join(fr"R:\RECOVER\SecureStudyData\1726269 Phantom Limb Pain F31\Ecological Momentary Assessment\Survey Responses\{participant_id}\{participant_id}_combineddata1.csv"), index=False, header=True)
+
+    group.to_csv(os.path.join(input_dir, f"{participant_id}_combineddata1.csv"), index=False, header=True)
